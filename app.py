@@ -1,8 +1,4 @@
-import os
 from pathlib import Path
-
-import joblib
-import numpy as np
 import pandas as pd
 import streamlit as st
 from sklearn.compose import ColumnTransformer
@@ -15,8 +11,7 @@ st.set_page_config(page_title="Credit Default Predictor", page_icon="💳", layo
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-MODEL_DIR = BASE_DIR / "models"
-MODEL_PATH = MODEL_DIR / "credit_default_rf_pipeline.joblib"
+
 
 TARGET = "default payment next month"
 PAY_COLS = ["PAY_0", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6"]
@@ -139,8 +134,12 @@ def make_input():
     for i in range(1, 7):
         bills[f"BILL_AMT{i}"] = st.sidebar.number_input(f"BILL_AMT{i}", value=50000, step=1000)
     for i in range(1, 7):
-        payments[f"PAY_AMT{i}"] = st.sidebar.number_input(f"PAY_AMT{i}", value=5000, step=500)
-
+      payments[f"PAY_AMT{i}"] = st.sidebar.number_input(
+        f"PAY_AMT{i}",
+        min_value=0,
+        value=5000,
+        step=500
+    )
     row = {
         "LIMIT_BAL": limit_bal, "AGE": age, "SEX": sex,
         "EDUCATION": education, "MARRIAGE": marriage,
